@@ -1,0 +1,8 @@
+Website = "https://github.com/dev-parvej/clipboard_manager"
+
+[Details]
+Icon = "app_icon.png"
+Name = "Clipboard Manager"
+ID = "com.example.app"
+Version = "1.0.0"
+Build = 1
