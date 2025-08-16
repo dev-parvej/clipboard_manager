@@ -20,14 +20,10 @@ func main() {
 func SetupSystemTraySimple() {
 	myApp := app.New()
 
-	// myApp.SetMetadata(&app.Metadata{
-	// 	Name: "",
-	// 	ID:   "com.example.clipboardmanager",
-	// })
+	stopCh := make(chan bool)
 
-	// Start clipboard monitoring with the app instance
-	StartClipboardMonitor(myApp)
-	SetupSystemTray(myApp)
+	StartClipboardMonitor(myApp, stopCh)
+	SetupSystemTray(myApp, stopCh)
 
 	fmt.Println("✨ Clipboard Manager is running!")
 	fmt.Println("💡 Copy some text to see it captured.")

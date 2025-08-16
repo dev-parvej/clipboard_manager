@@ -5,7 +5,7 @@ import (
 	"fyne.io/fyne/v2/driver/desktop"
 )
 
-func SetupSystemTray(a fyne.App) error {
+func SetupSystemTray(a fyne.App, stopCh chan bool) error {
 	if desk, ok := a.(desktop.App); ok {
 		desk.SetSystemTrayMenu(
 			fyne.NewMenu("Clipboard Manager",
@@ -17,6 +17,7 @@ func SetupSystemTray(a fyne.App) error {
 				}),
 				fyne.NewMenuItemSeparator(),
 				fyne.NewMenuItem("Quit", func() {
+					stopCh <- true
 					a.Quit()
 				}),
 			),

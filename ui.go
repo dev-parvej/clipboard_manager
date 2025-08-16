@@ -72,7 +72,7 @@ func ShowHistoryWindow() error {
 
 	FetchAndShowTheData(mainContainer, w)
 	w.SetContent(content)
-	w.Resize(fyne.NewSize(800, 600))
+	w.Resize(fyne.NewSize(750, 700))
 	w.Show()
 	return nil
 }
@@ -158,12 +158,14 @@ func FetchAndShowTheData(mainContainer *fyne.Container, w fyne.Window) {
 		tableData := components.TableData{
 			Headers:   []string{"Content", "Time", "Actions"},
 			Rows:      rows,
-			Widths:    []float32{500, 150, 100},
+			Widths:    []float32{750, 150, 100},
 			OnRefresh: convertToRows,
 			ButtonColumn: map[int]components.ButtonConfig{
 				2: {
-					Text: "",
-					Icon: theme.DeleteIcon(),
+					Text:   "",
+					Icon:   theme.DeleteIcon(),
+					Height: 40,
+					Width:  50,
 					OnClick: func(rowIndex int) {
 						DeleteEntry(dateEntries[rowIndex].id)
 						FetchAndShowTheData(mainContainer, w)

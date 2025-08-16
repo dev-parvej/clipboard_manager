@@ -7,32 +7,30 @@ import (
 	"fyne.io/fyne/v2"
 )
 
-func StartClipboardMonitor(myApp fyne.App) {
-	// Use the existing app instead of creating a new one
+func StartClipboardMonitor(myApp fyne.App, stopCh <-chan bool) {
 	myWindow := myApp.NewWindow("Clipboard Monitor")
-	myWindow.Hide() // Hide the window since we don't need UI
+	myWindow.Hide()
 
 	var last string
-
-	// Use a ticker for better performance
 	ticker := time.NewTicker(500 * time.Millisecond)
 
-	// Run clipboard monitoring in a goroutine
 	go func() {
 		defer ticker.Stop()
-		for range ticker.C {
-			// Access clipboard directly - this should work from goroutine in newer Fyne versions
-			clipboard := myWindow.Clipboard()
-			current := clipboard.Content()
-
-			if current != "" && current != last {
-				StoreTextClipboard(current)
-				last = current
-				fmt.Println("Captured:", current)
+		for {
+			select {
+			case <-stopCh:
+				fmt.Println("Clipboard monitor stopped")
+				return
+			case <-ticker.C:
+				clipboard := myApp.Clipboard()
+				current := clipboard.Content()
+				if current != "" && current != last {
+					StoreTextClipboard(current)
+					last = current
+					fmt.Println("Captured:", current)
+				}
+				CleanupOldEntries()
 			}
-
-			// This can run outside the main thread
-			CleanupOldEntries()
 		}
 	}()
 }
